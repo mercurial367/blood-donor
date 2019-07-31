@@ -8,11 +8,11 @@
 
 @section('content')
 <div class="card card-primary">
-    <div class="card-header bg-primary">Search Donors</div>
+    <div class="card-header bg-primary text-light">Search Donors</div>
     <div class="card-body">
         <div class="container">
             
-            <form method="GET" action="/search/blood-donors">
+            <form method="GET" action="/public/blood-donors">
                 @csrf
                 <div class="form-group row">
                     <div class="col-md-3 row mt-1 mb-1">

@@ -27,8 +27,8 @@
                 <div class="col-sm-6">
                         User-Type : Admin
                     </div>
+                
                 @endif
-                @if ($userdata->bloodData)
                 <div class="col-sm-6">
                         Mobile Number : {{$userdata->bloodData->mobile_no}}
                     </div>
@@ -41,13 +41,14 @@
                     <div class="col-sm-6">
                         State : {{$userdata->bloodData->state}}
                     </div>
-                @else
+                
                 <div class="col-sm-12 text-center">
+                    <br>
                 <form action="/profile/edit" method="GET">
                     <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
                 </div>
-                @endif
+               
                 
             </div>
         </div>

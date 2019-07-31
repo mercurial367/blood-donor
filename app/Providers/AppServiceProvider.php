@@ -48,6 +48,11 @@ class AppServiceProvider extends ServiceProvider
             );
         });
         $events->listen(BuildingMenu::class, function (BuildingMenu $event) {
+            $event->menu->add([
+                'text' => 'Change Password',
+                'url' => 'password/reset-pass',
+                'icon' => 'lock'
+            ]);
             if(isset(Auth::user()->role)){
                 $event->menu->add('ADMIN NAVIGATION');
                 $event->menu->add([

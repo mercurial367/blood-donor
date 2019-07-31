@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\BloodData;
+use Illuminate\Support\Str;
 class AdminController extends Controller
 {
     public function __construct()
@@ -32,12 +33,21 @@ class AdminController extends Controller
         $user = User::find($id);
         if((string)$user->active == 0){
             $user->update(["active" => true]);
+            Session::flash('unblocked','User Successfully Unblocked');
         }
         else{
             $user->update(["active" => false]);  
+            Session::flash('blocked','User Successfully Blocked');
         }
         return redirect('/admin/view-users');
         return (string)$user->active;
+    }
+    public function deleteUser($id)
+    {
+        User::find($id)->delete();
+        BloodData::where('user_id', '=',$id)->delete();
+        Session::flash('delete','User Successfully Deleted');
+        return redirect('/admin/view-users');
     }
     public function addDonors()
     {
@@ -107,18 +117,31 @@ class AdminController extends Controller
                 fclose($file);
 
                 foreach($importData_arr as $importData){
+                    if(isset($importData[0]) and (Str::lower($importData[1]) =='a+' or Str::lower($importData[1]) =='a-' or Str::lower($importData[1]) =='b-' or Str::lower($importData[1]) =='b+' or Str::lower($importData[1]) =='o-' or Str::lower($importData[1]) =='o+' or Str::lower($importData[1]) =='ab+' or Str::lower($importData[1]) =='ab-') and (strlen($importData[2]) > 9 and strlen($importData[2]) < 13) and isset($importData[3]) and isset($importData[4])){
+                        $insertData = array(
+                           "name"=>$importData[0],
+                           "blood_group"=>$importData[1],
+                           "mobile_no"=>$importData[2],
+                           "city"=>$importData[3],
+                           "state"=>$importData[4]
+                        );
 
-                    $insertData = array(
-                       "name"=>$importData[0],
-                       "blood_group"=>$importData[1],
-                       "mobile_no"=>$importData[2],
-                       "city"=>$importData[3],
-                       "state"=>$importData[4]
-                    );
-                    BloodData::create($insertData);
+                        BloodData::create($insertData);
+                    }else{
+                        $falselyData = array(
+                            "name"=>$importData[0],
+                            "blood_group"=>Str::upper($importData[1]),
+                            "mobile_no"=>$importData[2],
+                            "city"=>$importData[3],
+                            "state"=>$importData[4]
+                         );
+                    }
         
-                  }
-                  Session::flash('success-msg','Import Successful.');
+                }
+                    Session::flash('success-msg','Import Successful.');
+                    if(isset($falselyData)){
+                      Session::flash('flasedata', 'some data are not imported please check');
+                    }
                   
             }
             else{

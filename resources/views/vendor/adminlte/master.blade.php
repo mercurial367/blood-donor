@@ -62,7 +62,9 @@
     <!-- ChartJS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 @endif
-
+<footer class="text-center" style="bottom:0; position:absolute; background:#6cf; width:100%;">
+        &copy; 2019, All Rights Reserved
+      </footer>
 @yield('adminlte_js')
 
 </body>

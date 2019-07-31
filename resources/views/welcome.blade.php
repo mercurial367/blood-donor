@@ -38,6 +38,8 @@
     
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    
+    <footer class="text-center" style="bottom:0; position:absolute; background:#6cf; width:100%;">
+      &copy; 2019, All Rights Reserved
+    </footer>
 </body>
 </html>

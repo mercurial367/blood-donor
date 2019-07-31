@@ -39,10 +39,30 @@ class LoginController extends Controller
     }
     protected function credentials(Request $request)
     {
-        return [
-            'email' => $request->{$this->username()},
-            'password' => $request->password,
-            'active' => '1',
-        ];
+        $credentials = $request->only($this->username(), 'password');
+        $credentials['active'] = 1;
+        return $credentials;
+
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => trans('auth.failed')];
+        // Load user from database
+        $user = \App\User::where($this->username(), $request->{$this->username()})->first();
+        // Check if user was successfully loaded, that the password matches
+        // and active is not 1. If so, override the default error message.
+        if ($user && \Hash::check($request->password, $user->password) && $user->active != 1) {
+            $errors = [$this->username() => ''];
+            $errors = ['active' => 'Your account is not active.'];
+
+        }
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
     }
 }
+

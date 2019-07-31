@@ -27,6 +27,11 @@
                 <li style="color:#000;"> {{Session::get('error-msg')}} </li>
             </ul>
             @endif
+            @if(Session::has('flasedata'))
+                <ul class="alert alert-danger" style="list-style:none;">                   
+                    <li style="color:#000;"> {{Session::get('flasedata')}} </li>
+                </ul>
+                @endif
             <div class="form-group row">
                 <label for="file" class="col-sm-1 col-form-label">Name</label>
                 <div class="col-sm-5">

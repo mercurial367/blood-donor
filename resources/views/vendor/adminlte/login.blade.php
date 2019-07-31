@@ -1,5 +1,5 @@
 @extends('adminlte::master')
-
+@section('title', 'Rakta')
 @section('adminlte_css')
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/iCheck/square/blue.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/auth.css') }}">
@@ -15,10 +15,23 @@
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
+                @if(Session::has('pass-change-success-msg'))
+                <ul class="alert alert-success" style="list-style:none;">
+                    <li style="color:#fff;"> <small>{{Session::get('pass-change-success-msg')}}</small> </li>
+                </ul>
+                @endif
             <p class="login-box-msg">{{ trans('adminlte::adminlte.login_message') }}</p>
             <form action="{{ url(config('adminlte.login_url', 'login')) }}" method="post">
                 {!! csrf_field() !!}
-
+                <div>
+                @if ($errors->has('active'))
+                        <span class="alert alert-danger">
+                            <strong>{{ $errors->first('active') }}</strong>
+                        </span>
+                        <br><br>
+                    @endif
+                    
+                </div>
                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
                     <input type="email" name="email" class="form-control" value="{{ old('email') }}"
                            placeholder="{{ trans('adminlte::adminlte.email') }}">
@@ -43,7 +56,7 @@
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
                             <label>
-                                <input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }}
+                                &nbsp;&nbsp;<input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }} &nbsp;
                             </label>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\BloodData;
 use App\StateCity;
 use Illuminate\Support\Facades\Session;
@@ -50,11 +51,11 @@ class PublicController extends Controller
             if(isset($bloodGroup)){
                 if(isset($city)){
                     if(isset($name)){
-                        if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup)) and Str::contains(Str::lower($allDonors['city']), Str::lower($city)) and Str::contains(Str::lower($allDonors['name']), Str::lower($name)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
+                        if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup) and Str::contains(Str::lower($allDonors['city']), Str::lower($city)) and Str::contains(Str::lower($allDonors['name']), Str::lower($name)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
                             return $allDonors;
                         }
                     }else{
-                        if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup)) and Str::contains(Str::lower($allDonors['city']), Str::lower($city)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
+                        if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup) and Str::contains(Str::lower($allDonors['city']), Str::lower($city)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
                             return $allDonors;
                         }
                     }
@@ -62,22 +63,22 @@ class PublicController extends Controller
                 }else{
                     if(isset($state)){
                         if(isset($name)){
-                            if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup)) and Str::contains(Str::lower($allDonors['name']), Str::lower($name)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
+                            if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup) and Str::contains(Str::lower($allDonors['name']), Str::lower($name)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
                                 return $allDonors;
                             }
                         }else{
-                            if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup)) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
+                            if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup) and Str::contains(Str::lower($allDonors['state']), Str::lower($state))){
                                 return $allDonors;
                             }
                         }
                     }
                     else{
                         if(isset($name)){
-                            if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup)) and Str::contains(Str::lower($allDonors['name']), Str::lower($name))){
+                            if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup) and Str::contains(Str::lower($allDonors['name']), Str::lower($name))){
                                 return $allDonors;
                             }
                         }else{
-                            if(Str::contains(Str::lower($allDonors['blood_group']), Str::lower($bloodGroup))){
+                            if(Str::lower($allDonors['blood_group']) === Str::lower($bloodGroup)){
                                 return $allDonors;
                             }
                         }
@@ -120,6 +121,10 @@ class PublicController extends Controller
 
         })->paginate(10) ;
         
-        return view('publicSearchData', compact('donors','city', 'bloodGroup', 'name', 'state'));
+        if(Auth::user()){
+            return view('searchData', compact('donors','city', 'bloodGroup', 'name', 'state'));
+        }else{
+            return view('publicSearchData', compact('donors','city', 'bloodGroup', 'name', 'state'));
+        }
     }
 }
